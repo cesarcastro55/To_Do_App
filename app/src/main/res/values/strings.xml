@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">To-Do App</string>
+    <string name="hint_task_name">Task name</string>
+    <string name="important_task_text">Important task</string>
+    <string name="item_search_title">Search</string>
+    <string name="sort_title">Sort</string>
+    <string name="sort_by_name_title">Sort by name</string>
+    <string name="sort_by_date_created_title">Sort by date created</string>
+    <string name="hide_completed_title">Hide completed</string>
+    <string name="delete_all_completed_title">Delete all completed</string>
+</resources>
