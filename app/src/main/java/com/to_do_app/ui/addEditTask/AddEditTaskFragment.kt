@@ -1,6 +1,6 @@
 package com.to_do_app.ui.addEditTask
 
-/*import android.os.Bundle
+import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -27,4 +27,4 @@ class AddEditTaskFragment :Fragment(R.layout.fragment_add_edit_task) {
             textViewDateCreated.text = "Created: ${viewModel.task?.createdDateFormatted}"
         }
     }
-}*/
+}

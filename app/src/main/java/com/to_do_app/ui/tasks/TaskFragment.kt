@@ -9,6 +9,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,12 +21,11 @@ import com.to_do_app.databinding.FragmentTasksBinding
 import com.to_do_app.util.exhaustive
 import com.to_do_app.util.onQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class TaskFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClickListenner {
+class TaskFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClickListener {
 
     private val viewModel: TasksViewModel by viewModels()
 
@@ -59,9 +59,9 @@ class TaskFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClick
                 }
             }).attachToRecyclerView(recyclerViewTasks)
 
-            /*buttonAddTasks.setOnClickListener {
+            buttonAddTasks.setOnClickListener {
                 viewModel.onAddNewTaskClick()
-            }*/
+            }
         }
 
         viewModel.tasks.observe(viewLifecycleOwner) {
@@ -79,10 +79,12 @@ class TaskFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClick
                     }
 
                     is TasksViewModel.TasksEvent.NavigateToAddTaskScreen -> {
-
+                        val action = TaskFragmentDirections.actionTaskFragmentToAddEditTaskFragment( "New Task",null)
+                        findNavController().navigate(action)
                     }
                     is TasksViewModel.TasksEvent.NavigateToEditTaskScreen -> {
-
+                        val action = TaskFragmentDirections.actionTaskFragmentToAddEditTaskFragment( "Edit Task", event.task)
+                        findNavController().navigate(action)
                     }
                 }.exhaustive
             }
@@ -100,6 +102,7 @@ class TaskFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClick
         viewModel.onTaskCheckedChanged(task, isChecked)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_fragment_tasks, menu)
 
@@ -116,6 +119,7 @@ class TaskFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClick
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.action_sort_by_name -> {

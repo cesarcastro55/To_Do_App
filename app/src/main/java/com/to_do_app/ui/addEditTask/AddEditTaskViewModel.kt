@@ -1,17 +1,18 @@
 package com.to_do_app.ui.addEditTask
 
 
-/*import androidx.hilt.Assisted
+
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.to_do_app.data.Task
 import com.to_do_app.data.TaskDao
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-
+@HiltViewModel
 class AddEditTaskViewModel @Inject constructor(
     private val taskDao: TaskDao,
-    @Assisted private val state: SavedStateHandle
+    private val state: SavedStateHandle
 ) : ViewModel() {
 
     val task = state.get<Task>("task")
@@ -27,4 +28,4 @@ class AddEditTaskViewModel @Inject constructor(
             field = value
             state.set("taskImportance", value)
         }
-}*/
+}

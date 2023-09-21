@@ -1,6 +1,8 @@
 package com.to_do_app.ui.tasks
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.to_do_app.data.PreferencesManager
@@ -8,21 +10,23 @@ import com.to_do_app.data.SortOrder
 import com.to_do_app.data.Task
 import com.to_do_app.data.TaskDao
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class TasksViewModel @Inject constructor(
     private val taskDao: TaskDao,
-    private val preferencesManager: PreferencesManager
+    private val preferencesManager: PreferencesManager,
+    private val state: SavedStateHandle
 ) : ViewModel() {
 
-    val searchQuery = MutableStateFlow("")
+    val searchQuery = state.getLiveData("searchQuery", "")
 
     val preferencesFlow = preferencesManager.preferencesFlow
 
@@ -30,7 +34,7 @@ class TasksViewModel @Inject constructor(
     val tasksEvent = tasksEventChannel.receiveAsFlow()
 
     private val taskFlow = combine(
-        searchQuery,
+        searchQuery.asFlow(),
         preferencesFlow
     ) {
         query, filterPreferences ->
@@ -58,12 +62,19 @@ class TasksViewModel @Inject constructor(
     }
 
     fun onTaskSwiped(task: Task) = viewModelScope.launch {
-        taskDao.delete(task)
+        // Use withContext to switch to a background thread
+        withContext(Dispatchers.IO) {
+            taskDao.delete(task)
+        }
+        // Continue on the main thread to send the event
         tasksEventChannel.send(TasksEvent.ShowUndoDeleteTaskMessage(task))
     }
 
+
     fun onUndoDeleteCLick(task: Task) = viewModelScope.launch {
-        taskDao.insert(task)
+        withContext(Dispatchers.IO) {
+            taskDao.insert(task)
+        }
     }
 
     fun onAddNewTaskClick() = viewModelScope.launch {

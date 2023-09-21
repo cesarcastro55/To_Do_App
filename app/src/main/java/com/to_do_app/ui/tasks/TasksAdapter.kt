@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.to_do_app.data.Task
 import com.to_do_app.databinding.ItemTaskBinding
 
-class TasksAdapter(private val listener: OnItemClickListenner) : ListAdapter<Task, TasksAdapter.TaskViewHolder>(DiffCalback()) {
+class TasksAdapter(private val listener: OnItemClickListener) : ListAdapter<Task, TasksAdapter.TaskViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -52,12 +52,12 @@ class TasksAdapter(private val listener: OnItemClickListenner) : ListAdapter<Tas
         }
     }
 
-    interface OnItemClickListenner {
+    interface OnItemClickListener {
         fun onItemClick(task: Task)
         fun onCheckBoxClick(task: Task, isChecked: Boolean)
     }
 
-    class DiffCalback : DiffUtil.ItemCallback<Task>() {
+    class DiffCallback : DiffUtil.ItemCallback<Task>() {
         override fun areItemsTheSame(oldItem: Task, newItem: Task) =
             oldItem.id == newItem.id
 
