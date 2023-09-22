@@ -66,11 +66,9 @@ class TasksViewModel @Inject constructor(
     }
 
     fun onTaskSwiped(task: Task) = viewModelScope.launch {
-        // Use withContext to switch to a background thread
         withContext(Dispatchers.IO) {
             taskDao.delete(task)
         }
-        // Continue on the main thread to send the event
         tasksEventChannel.send(TasksEvent.ShowUndoDeleteTaskMessage(task))
     }
 
