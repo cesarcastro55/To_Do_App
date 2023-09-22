@@ -9,6 +9,8 @@ import com.to_do_app.data.PreferencesManager
 import com.to_do_app.data.SortOrder
 import com.to_do_app.data.Task
 import com.to_do_app.data.TaskDao
+import com.to_do_app.ui.ADD_TASK_RESULT_OK
+import com.to_do_app.ui.EDIT_TASK_RESULT_OK
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -58,7 +60,9 @@ class TasksViewModel @Inject constructor(
     }
 
     fun onTaskCheckedChanged(task: Task, isChecked: Boolean) = viewModelScope.launch {
-        taskDao.update(task.copy(completed = isChecked))
+        withContext(Dispatchers.IO) {
+            taskDao.update(task.copy(completed = isChecked))
+        }
     }
 
     fun onTaskSwiped(task: Task) = viewModelScope.launch {
@@ -81,10 +85,22 @@ class TasksViewModel @Inject constructor(
         tasksEventChannel.send(TasksEvent.NavigateToAddTaskScreen)
     }
 
+    fun onAddEditResult(result: Int) {
+        when (result) {
+            ADD_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task added")
+            EDIT_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task updated")
+        }
+    }
+
+    private fun showTaskSavedConfirmationMessage(text: String) = viewModelScope.launch {
+        tasksEventChannel.send(TasksEvent.ShowTaskSavedConfirmationMessage(text))
+    }
+
     sealed class TasksEvent {
         object NavigateToAddTaskScreen : TasksEvent()
         data class NavigateToEditTaskScreen(val task: Task) : TasksEvent()
         data class ShowUndoDeleteTaskMessage(val task: Task) : TasksEvent()
+        data class ShowTaskSavedConfirmationMessage(val msg: String) : TasksEvent()
     }
 }
 

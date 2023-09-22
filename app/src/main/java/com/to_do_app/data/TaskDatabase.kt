@@ -32,8 +32,6 @@ abstract class TaskDatabase : RoomDatabase() {
                 dao.insert(Task("Meal Planning", important = true))
                 dao.insert(Task("Plant a Garden"))
                 dao.insert(Task("Call Elon Musk"))
-
-
             }
         }
     }
