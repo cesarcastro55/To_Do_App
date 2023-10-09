@@ -19,7 +19,6 @@ import com.to_do_app.R
 import com.to_do_app.data.SortOrder
 import com.to_do_app.data.Task
 import com.to_do_app.databinding.FragmentTasksBinding
-import com.to_do_app.util.exhaustive
 import com.to_do_app.util.onQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
@@ -104,7 +103,7 @@ class TaskFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClick
                         val action = TaskFragmentDirections.actionGlobalDeleteAllCompletedDialogFragment()
                         findNavController().navigate(action)
                     }
-                }.exhaustive
+                }
             }
         }
 

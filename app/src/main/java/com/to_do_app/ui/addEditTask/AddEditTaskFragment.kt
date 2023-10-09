@@ -13,9 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.to_do_app.R
 import com.to_do_app.databinding.FragmentAddEditTaskBinding
-import com.to_do_app.util.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class AddEditTaskFragment :Fragment(R.layout.fragment_add_edit_task) {
@@ -61,7 +59,7 @@ class AddEditTaskFragment :Fragment(R.layout.fragment_add_edit_task) {
                         )
                         findNavController().popBackStack()
                     }
-                }.exhaustive
+                }
             }
         }
     }
